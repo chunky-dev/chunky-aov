@@ -62,5 +62,6 @@ public class AmbientOcclusionTracer implements RayTracer {
                 break;
             }
         }
+        ray.color.scale(1.0 / Math.max(ray.depth, 1));
     }
 }
