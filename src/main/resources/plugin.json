@@ -1,0 +1,8 @@
+{
+    "name": "Chunky AOV",
+    "author": "Redox",
+    "main": "dev.thatredox.chunkyaov.ChunkyAOV",
+    "version": "0.0.1",
+    "targetVersion": "2.4.2",
+    "description": "Arbitrary output variable renderers for Chunky."
+}
