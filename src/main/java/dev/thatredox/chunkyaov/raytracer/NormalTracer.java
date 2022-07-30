@@ -30,7 +30,7 @@ import se.llbit.math.Vector3;
 
 public class NormalTracer implements RayTracer {
     public static boolean MAP_POSITIVE = false;
-    public static boolean NORMAL_WATER_DISPLACEMENT = true;
+    public static boolean WATER_DISPLACEMENT = true;
 
     private NormalTracer() {}
 
@@ -53,7 +53,7 @@ public class NormalTracer implements RayTracer {
     public void trace(Scene scene, WorkerState state) {
         Ray ray = state.ray;
         if (PreviewRayTracer.nextIntersection(scene, ray)) {
-            if (NORMAL_WATER_DISPLACEMENT && !scene.stillWaterEnabled()
+            if (WATER_DISPLACEMENT && !scene.stillWaterEnabled()
                     && ray.getCurrentMaterial().isWater()) {
                 WaterModel.doWaterDisplacement(ray);
             }

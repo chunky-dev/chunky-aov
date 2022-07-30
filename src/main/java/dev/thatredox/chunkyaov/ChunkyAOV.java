@@ -21,10 +21,16 @@ import dev.thatredox.chunkyaov.raytracer.AlbedoTracer;
 import dev.thatredox.chunkyaov.raytracer.AmbientOcclusionTracer;
 import dev.thatredox.chunkyaov.raytracer.DepthTracer;
 import dev.thatredox.chunkyaov.raytracer.NormalTracer;
+import dev.thatredox.chunkyaov.ui.ChunkyAovTab;
 import se.llbit.chunky.Plugin;
 import se.llbit.chunky.main.Chunky;
 import se.llbit.chunky.main.ChunkyOptions;
 import se.llbit.chunky.ui.ChunkyFx;
+import se.llbit.chunky.ui.render.RenderControlsTab;
+import se.llbit.chunky.ui.render.RenderControlsTabTransformer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChunkyAOV implements Plugin {
     @Override
@@ -33,6 +39,13 @@ public class ChunkyAOV implements Plugin {
         NormalTracer.register();
         AmbientOcclusionTracer.register();
         DepthTracer.register();
+
+        RenderControlsTabTransformer prev = chunky.getRenderControlsTabTransformer();
+        chunky.setRenderControlsTabTransformer(tabs -> {
+            List<RenderControlsTab> transformed = new ArrayList<>(prev.apply(tabs));
+            transformed.add(new ChunkyAovTab());
+            return transformed;
+        });
     }
 
     public static void main(String[] args) {
