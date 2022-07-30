@@ -28,6 +28,8 @@ import se.llbit.chunky.renderer.scene.Scene;
 import se.llbit.math.Ray;
 
 public class DepthTracer implements RayTracer {
+    public static double NORMALIZATION_FACTOR = 100.0;
+
     private DepthTracer() {}
 
     public static void register() {
@@ -48,10 +50,11 @@ public class DepthTracer implements RayTracer {
     @Override
     public void trace(Scene scene, WorkerState state) {
         Ray ray = state.ray;
-        double gray = 1.0;
+        double distance = 0.0;
         if (PreviewRayTracer.nextIntersection(scene, ray)) {
-            gray = ray.distance;
+            distance = ray.distance;
         }
-        ray.color.set(gray, gray, gray, 1);
+        distance /= NORMALIZATION_FACTOR;
+        ray.color.set(distance, distance, distance, 1);
     }
 }

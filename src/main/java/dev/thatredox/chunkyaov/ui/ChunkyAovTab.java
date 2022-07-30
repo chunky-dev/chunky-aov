@@ -18,14 +18,19 @@
 
 package dev.thatredox.chunkyaov.ui;
 
+import dev.thatredox.chunkyaov.raytracer.DepthTracer;
 import dev.thatredox.chunkyaov.raytracer.NormalTracer;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import se.llbit.chunky.renderer.scene.Scene;
+import se.llbit.chunky.ui.DoubleAdjuster;
+import se.llbit.chunky.ui.SliderAdjuster;
 import se.llbit.chunky.ui.render.RenderControlsTab;
 import se.llbit.json.Json;
 
@@ -34,20 +39,31 @@ public class ChunkyAovTab implements RenderControlsTab {
     private final VBox box = new VBox(10.0);
     private final SimpleBooleanProperty nmPositive = new SimpleBooleanProperty(NormalTracer.MAP_POSITIVE);
     private final SimpleBooleanProperty nmWaterDisplacement = new SimpleBooleanProperty(NormalTracer.WATER_DISPLACEMENT);
+    private final SimpleDoubleProperty depthNormFactor = new SimpleDoubleProperty(DepthTracer.NORMALIZATION_FACTOR);
 
     public ChunkyAovTab() {
         nmPositive.addListener((observable, oldValue, newValue) -> {
             NormalTracer.MAP_POSITIVE = newValue;
             if (scene != null) {
                 scene.setAdditionalData("aov_normal_positive", Json.of(newValue));
+                scene.refresh();
             }
         });
-        nmWaterDisplacement.addListener(((observable, oldValue, newValue) -> {
+        nmWaterDisplacement.addListener((observable, oldValue, newValue) -> {
             NormalTracer.WATER_DISPLACEMENT = newValue;
             if (scene != null) {
                 scene.setAdditionalData("aov_normal_water_displacement", Json.of(newValue));
+                scene.refresh();
             }
-        }));
+        });
+        depthNormFactor.addListener((observable, oldValue, newValue) ->  {
+            double value = newValue.doubleValue();
+            DepthTracer.NORMALIZATION_FACTOR = value;
+            if (scene != null) {
+                scene.setAdditionalData("aov_depth_normalization", Json.of(value));
+                scene.refresh();
+            }
+        });
 
         box.setPadding(new Insets(10.0, 10.0, 10.0, 10.0));
 
@@ -60,6 +76,16 @@ public class ChunkyAovTab implements RenderControlsTab {
         nmWaterDisplacementBox.setTooltip(new Tooltip("Enable water displacement in normal map."));
         nmWaterDisplacementBox.selectedProperty().bindBidirectional(nmWaterDisplacement);
         box.getChildren().add(nmWaterDisplacementBox);
+
+        box.getChildren().add(new Separator());
+
+        DoubleAdjuster depthNormAdjuster = new DoubleAdjuster();
+        depthNormAdjuster.setName("Depth Normalization");
+        depthNormAdjuster.setTooltip("Distance normalization factor for depth map.");
+        depthNormAdjuster.valueProperty().bindBidirectional(depthNormFactor);
+        depthNormAdjuster.setRange(1.0, 1000.0);
+        depthNormAdjuster.clampMin();
+        box.getChildren().add(depthNormAdjuster);
     }
 
     @Override
@@ -67,6 +93,7 @@ public class ChunkyAovTab implements RenderControlsTab {
         this.scene = scene;
         nmPositive.set(scene.getAdditionalData("aov_normal_positive").boolValue(nmPositive.get()));
         nmWaterDisplacement.set(scene.getAdditionalData("aov_normal_water_displacement").boolValue(nmWaterDisplacement.get()));
+        depthNormFactor.set(scene.getAdditionalData("aov_depth_normalization").doubleValue(depthNormFactor.get()));
     }
 
     @Override
