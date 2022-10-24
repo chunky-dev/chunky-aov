@@ -40,6 +40,7 @@ public class ChunkyAovTab implements RenderControlsTab {
     private final SimpleBooleanProperty nmPositive = new SimpleBooleanProperty(NormalTracer.MAP_POSITIVE);
     private final SimpleBooleanProperty nmWaterDisplacement = new SimpleBooleanProperty(NormalTracer.WATER_DISPLACEMENT);
     private final SimpleDoubleProperty depthNormFactor = new SimpleDoubleProperty(DepthTracer.NORMALIZATION_FACTOR);
+    private final SimpleBooleanProperty infiniteSkyDepth = new SimpleBooleanProperty(DepthTracer.INFINITE_SKY_DISTANCE);
 
     public ChunkyAovTab() {
         nmPositive.addListener((observable, oldValue, newValue) -> {
@@ -61,6 +62,13 @@ public class ChunkyAovTab implements RenderControlsTab {
             DepthTracer.NORMALIZATION_FACTOR = value;
             if (scene != null) {
                 scene.setAdditionalData("aov_depth_normalization", Json.of(value));
+                scene.refresh();
+            }
+        });
+        infiniteSkyDepth.addListener((observable, oldValue, newValue) -> {
+            DepthTracer.INFINITE_SKY_DISTANCE = newValue;
+            if (scene != null) {
+                scene.setAdditionalData("aov_infinite_sky_depth", Json.of(newValue));
                 scene.refresh();
             }
         });
@@ -86,6 +94,10 @@ public class ChunkyAovTab implements RenderControlsTab {
         depthNormAdjuster.setRange(1.0, 1000.0);
         depthNormAdjuster.clampMin();
         box.getChildren().add(depthNormAdjuster);
+
+        CheckBox enableInfiniteSkyDepth = new CheckBox("Infinite Sky Depth");
+        enableInfiniteSkyDepth.selectedProperty().bindBidirectional(infiniteSkyDepth);
+        box.getChildren().add(enableInfiniteSkyDepth);
     }
 
     @Override
@@ -94,6 +106,7 @@ public class ChunkyAovTab implements RenderControlsTab {
         nmPositive.set(scene.getAdditionalData("aov_normal_positive").boolValue(nmPositive.get()));
         nmWaterDisplacement.set(scene.getAdditionalData("aov_normal_water_displacement").boolValue(nmWaterDisplacement.get()));
         depthNormFactor.set(scene.getAdditionalData("aov_depth_normalization").doubleValue(depthNormFactor.get()));
+        infiniteSkyDepth.set(scene.getAdditionalData("aov_infinite_sky_depth").boolValue(infiniteSkyDepth.get()));
     }
 
     @Override

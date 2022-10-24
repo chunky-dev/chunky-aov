@@ -22,14 +22,14 @@ configurations {
 }
 
 dependencies {
-    provided 'se.llbit:chunky-core:2.4.2'
+    provided 'se.llbit:chunky-core:2.4.4'
     provided 'org.apache.commons:commons-math3:3.2'
     provided 'it.unimi.dsi:fastutil:8.4.4'
     bundled 'org.jocl:jocl:2.0.2'
 }
 
 javafx {
-    version = '11'
+    version = '11.0.2'
     modules = ['javafx.base', 'javafx.controls', 'javafx.fxml']
     configuration = 'provided'
 }
