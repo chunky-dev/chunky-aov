@@ -29,6 +29,7 @@ import se.llbit.math.Ray;
 
 public class DepthTracer implements RayTracer {
     public static double NORMALIZATION_FACTOR = 100.0;
+    public static boolean INFINITE_SKY_DISTANCE = true;
 
     private DepthTracer() {}
 
@@ -50,7 +51,8 @@ public class DepthTracer implements RayTracer {
     @Override
     public void trace(Scene scene, WorkerState state) {
         Ray ray = state.ray;
-        double distance = 0.0;
+        double distance = INFINITE_SKY_DISTANCE ? Double.MAX_VALUE : 0.0;
+
         if (PreviewRayTracer.nextIntersection(scene, ray)) {
             distance = ray.distance;
         }
