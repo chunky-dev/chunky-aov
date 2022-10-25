@@ -51,7 +51,7 @@ public class DepthTracer implements RayTracer {
     @Override
     public void trace(Scene scene, WorkerState state) {
         Ray ray = state.ray;
-        double distance = INFINITE_SKY_DISTANCE ? Double.longBitsToDouble(0x7fe0000000000000L) : 0.0;
+        double distance = INFINITE_SKY_DISTANCE ? Double.MAX_VALUE : 0.0;
 
         if (PreviewRayTracer.nextIntersection(scene, ray)) {
             distance = ray.distance;
