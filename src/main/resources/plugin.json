@@ -3,6 +3,6 @@
     "author": "Redox",
     "main": "dev.thatredox.chunkyaov.ChunkyAOV",
     "version": "0.0.2",
-    "targetVersion": "2.4.4",
+    "targetVersion": "2.4.2",
     "description": "Arbitrary output variable renderers for Chunky."
 }

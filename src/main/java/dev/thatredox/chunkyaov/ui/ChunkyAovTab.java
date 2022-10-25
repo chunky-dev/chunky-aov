@@ -28,6 +28,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import se.llbit.chunky.renderer.scene.Scene;
 import se.llbit.chunky.ui.DoubleAdjuster;
 import se.llbit.chunky.ui.SliderAdjuster;
@@ -98,6 +99,12 @@ public class ChunkyAovTab implements RenderControlsTab {
         CheckBox enableInfiniteSkyDepth = new CheckBox("Infinite Sky Depth");
         enableInfiniteSkyDepth.selectedProperty().bindBidirectional(infiniteSkyDepth);
         box.getChildren().add(enableInfiniteSkyDepth);
+
+        box.getChildren().add(new Separator());
+
+        Text text = new Text("For accurate results, set the Postprocessing filter in the Postprocessing tab to None.");
+        text.setWrappingWidth(350);
+        box.getChildren().add(text);
     }
 
     @Override
